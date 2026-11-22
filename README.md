@@ -199,8 +199,16 @@ Import ID: `<token id>/<policy id>`.
 1. Push a tag `v<semver>`, for example `v0.1.0`.
 2. The `release` workflow builds the zips with GoReleaser and makes a GitHub
    release.
-3. The workflow runs `scripts/publish-oci.sh`. The script pushes the zips to
-   `ghcr.io/znd4/opentofu-provider-desec:<version>`. The tag has no `v`.
+3. The workflow then runs the `publish-oci` workflow. It downloads the zips
+   from the release and runs `scripts/publish-oci.sh`. The script pushes them
+   to `ghcr.io/znd4/opentofu-provider-desec:<version>`. The OCI tag has no
+   `v`.
+
+To push an existing release again, run the `publish-oci` workflow by hand:
+
+```sh
+gh workflow run publish-oci.yaml -f tag=v0.1.0
+```
 
 The OCI layout follows the
 [OpenTofu provider mirror docs](https://opentofu.org/docs/cli/oci_registries/provider-mirror/):
